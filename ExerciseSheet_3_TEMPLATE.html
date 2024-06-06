@@ -2447,15 +2447,16 @@ files, as we only want to track the source files themselves.</p></li>
 <h2 id="exercise-2-putting-your-repository-on-github-3.5-points">Exercise 2: Putting your Repository on GitHub (3.5 Points)</h2>
 <p>For this task you will upload your solution to GitHub.</p>
 <ol type="a">
-<li>Create a new repository on GitHub in your account named
+<li><p>Create a new repository on GitHub in your account named
 <code>exeRcise-sheet-3</code>. Make sure you create a <strong>public repository</strong> so
 we are able to see it for grading. Add the link to the repository
-below:</li>
-<li>Push your code to this new repository by copying and executing the
+below:</p>
+<p><a href="mailto:git@github.com" class="email"><strong>git@github.com</strong></a><strong>:Miko304/exeRcise-sheet-3.git</strong></p></li>
+<li><p>Push your code to this new repository by copying and executing the
 snippet on github listed under
-<code>…or push an existing repository from the command line</code>.</li>
-<li>Regularly push your latest changes to GitHub again and especially do
-so when you are finished with this sheet.</li>
+<code>…or push an existing repository from the command line</code>.</p></li>
+<li><p>Regularly push your latest changes to GitHub again and especially do
+so when you are finished with this sheet.</p></li>
 </ol>
 <h2 id="exercise-3-baby-names-in-munich-3.5-points">Exercise 3: Baby-Names in Munich (3.5 Points)</h2>
 <p>Download the latest open datasets on given names (“Vornamen”) from the
@@ -2469,9 +2470,112 @@ datasets like these adding them to git is not a problem.</p></li>
 variable (“Anzahl”) and look into the data to determine why it is
 not numeric? Fix the problem in an appropriate manner, it is OK if
 some of the counts are inaccurate because of this. Explain your
-solution and the repercussions.</p></li>
+solution and the repercussions.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">vornamen_2022</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">&quot;data/open_data_portal_2022.csv&quot;</span><span class="op">)</span></span>
+<span><span class="va">vornamen_2023</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">&quot;data/vornamen-muenchen-2023.csv&quot;</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/typeof.html">typeof</a></span><span class="op">(</span><span class="va">vornamen_2022</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;character&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/typeof.html">typeof</a></span><span class="op">(</span><span class="va">vornamen_2023</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;character&quot;</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">clean_anzahl</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">anzahl</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Remove any commas, spaces, or special characters</span></span>
+<span>  <span class="va">anzahl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">&quot;[^0-9]&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="va">anzahl</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Convert to numeric</span></span>
+<span>  <span class="va">anzahl_numeric</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">anzahl</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">anzahl_numeric</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">vornamen_2022</span><span class="op">$</span><span class="va">Anzahl</span> <span class="op">&lt;-</span> <span class="fu">clean_anzahl</span><span class="op">(</span><span class="va">vornamen_2022</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">)</span></span>
+<span><span class="va">vornamen_2023</span><span class="op">$</span><span class="va">Anzahl</span> <span class="op">&lt;-</span> <span class="fu">clean_anzahl</span><span class="op">(</span><span class="va">vornamen_2023</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/typeof.html">typeof</a></span><span class="op">(</span><span class="va">vornamen_2022</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;double&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/typeof.html">typeof</a></span><span class="op">(</span><span class="va">vornamen_2023</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;double&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">vornamen_2022</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>  Vorname Anzahl Geschlecht
+1  Emilia    103          w
+2    Emma    101          w
+3     Mia     93          w
+4  Sophia     78          w
+5    Anna     72          w
+6     Lea     71          w</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">vornamen_2023</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>     Vorname Anzahl Geschlecht
+1       Leon    107          m
+2 Maximilian    105          m
+3     Emilia     89          w
+4       Paul     89          m
+5       Noah     83          m
+6      Anton     80          m</code></pre>
+</div>
+<p><strong>Solution</strong>:</p>
+<ol type="1">
+<li><p><strong>Remove non-numeric characters</strong>: Strip out any characters that
+are not digits from the “Anzahl” variable.</p></li>
+<li><p><strong>Convert to numeric</strong>: Change the cleaned “Anzahl” strings to
+numeric type.</p></li>
+</ol>
+<p><strong>Repercussions</strong>:</p>
+<ul>
+<li><p><strong>Potential Inaccuracy</strong>: Some counts may be slightly off due to
+character removal.</p></li>
+<li><p><strong>NA Values</strong>: Non-numeric entries might become NA, needing
+careful handling in analysis.</p></li>
+</ul></li>
 <li><p>Calculate the total number of babies born in Munich in 2022
-and 2023. Which year had the bigger baby-boom?</p></li>
+and 2023. Which year had the bigger baby-boom?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">vornamen_2022</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">&lt;-</span> <span class="fu">clean_anzahl</span><span class="op">(</span><span class="va">vornamen_2022</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">)</span></span>
+<span><span class="va">vornamen_2023</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">&lt;-</span> <span class="fu">clean_anzahl</span><span class="op">(</span><span class="va">vornamen_2023</span><span class="op">$</span><span class="va">Anzahl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">total_babies_2022</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">vornamen_2022</span><span class="op">$</span><span class="va">Anzahl</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">total_babies_2023</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">vornamen_2023</span><span class="op">$</span><span class="va">Anzahl</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="va">total_babies_2022</span> <span class="op">&gt;</span> <span class="va">total_babies_2023</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="st">&quot;2022 had the bigger baby-boom.&quot;</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">total_babies_2023</span> <span class="op">&gt;</span> <span class="va">total_babies_2022</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="st">&quot;2023 had the bigger baby-boom.&quot;</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="st">&quot;Both years had the same number of babies born.&quot;</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;2022 had the bigger baby-boom.&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">&quot;Total babies in 2022:&quot;</span>, <span class="va">total_babies_2022</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;Total babies in 2022: 25199&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">&quot;Total babies in 2023:&quot;</span>, <span class="va">total_babies_2023</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;Total babies in 2023: 24229&quot;</code></pre>
+</div></li>
 <li><p>Add a new column <code>year</code> to both datasets which holds the correct
 year for each.</p></li>
 <li><p>Combine both datasets into one using <code>bind_rows()</code>.</p></li>
@@ -2507,7 +2611,7 @@ correctly label the figure.</li>
 <h2 id="final-note">Final Note</h2>
 <p>Make sure to push all your commits and changes to GitHub before
 submittining the exercise sheet.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
