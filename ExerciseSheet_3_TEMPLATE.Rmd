@@ -79,7 +79,7 @@ a)  Create a new repository on GitHub in your account named
     we are able to see it for grading. Add the link to the repository
     below:
 
-    [**git\@github.com**](mailto:git@github.com){.email}**:Miko304/exeRcise-sheet-3.git**
+    [**https://github.com/Miko304/exeRcise-sheet-3.git**](https://github.com/Miko304/exeRcise-sheet-3.git){.uri}
 
 b)  Push your code to this new repository by copying and executing the
     snippet on github listed under
@@ -179,6 +179,14 @@ c)  Calculate the total number of babies born in Munich in 2022
 
 d)  Add a new column `year` to both datasets which holds the correct
     year for each.
+
+    ```{r}
+    data_2022 <- mutate(data_2022, year = 2022)
+    data_2023 <- mutate(data_2023, year = 2023)
+
+    head(data_2022)
+    head(data_2023)
+    ```
 
 e)  Combine both datasets into one using `bind_rows()`.
 
