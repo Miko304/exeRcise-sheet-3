@@ -78,9 +78,13 @@ a)  Create a new repository on GitHub in your account named
     `exeRcise-sheet-3`. Make sure you create a **public repository** so
     we are able to see it for grading. Add the link to the repository
     below:
+
+    [**git\@github.com**](mailto:git@github.com){.email}**:Miko304/exeRcise-sheet-3.git**
+
 b)  Push your code to this new repository by copying and executing the
     snippet on github listed under
     `…or push an existing repository from the command line`.
+
 c)  Regularly push your latest changes to GitHub again and especially do
     so when you are finished with this sheet.
 
@@ -100,6 +104,55 @@ b)  Load the data for both years into R. Check the type of the count
     not numeric? Fix the problem in an appropriate manner, it is OK if
     some of the counts are inaccurate because of this. Explain your
     solution and the repercussions.
+
+    ```{r}
+    library(tidyverse)
+
+    vornamen_2022 <- read.csv("data/open_data_portal_2022.csv")
+    vornamen_2023 <- read.csv("data/vornamen-muenchen-2023.csv")
+    ```
+
+    ```{r}
+    typeof(vornamen_2022$Anzahl)
+    typeof(vornamen_2023$Anzahl)
+    ```
+
+    ```{r}
+    clean_anzahl <- function(anzahl) {
+      # Remove any commas, spaces, or special characters
+      anzahl <- gsub("[^0-9]", "", anzahl)
+      
+      # Convert to numeric
+      anzahl_numeric <- as.numeric(anzahl)
+      
+      return(anzahl_numeric)
+    }
+
+    vornamen_2022$Anzahl <- clean_anzahl(vornamen_2022$Anzahl)
+    vornamen_2023$Anzahl <- clean_anzahl(vornamen_2023$Anzahl)
+
+    typeof(vornamen_2022$Anzahl)
+    typeof(vornamen_2023$Anzahl)
+
+    head(vornamen_2022)
+    head(vornamen_2023)
+    ```
+
+    **Solution**:
+
+    1.  **Remove non-numeric characters**: Strip out any characters that
+        are not digits from the "Anzahl" variable.
+
+    2.  **Convert to numeric**: Change the cleaned "Anzahl" strings to
+        numeric type.
+
+    **Repercussions**:
+
+    -   **Potential Inaccuracy**: Some counts may be slightly off due to
+        character removal.
+
+    -   **NA Values**: Non-numeric entries might become NA, needing
+        careful handling in analysis.
 
 c)  Calculate the total number of babies born in Munich in 2022
     and 2023. Which year had the bigger baby-boom?
