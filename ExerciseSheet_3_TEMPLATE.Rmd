@@ -151,8 +151,7 @@ b)  Load the data for both years into R. Check the type of the count
     -   **Potential Inaccuracy**: Some counts may be slightly off due to
         character removal.
 
-    -   **NA Values**: Non-numeric entries might become NA, needing
-        careful handling in analysis.
+    -   **NA Values**: Non-numeric entries might become NA.
 
 c)  Calculate the total number of babies born in Munich in 2022
     and 2023. Which year had the bigger baby-boom?
@@ -164,15 +163,6 @@ c)  Calculate the total number of babies born in Munich in 2022
     total_babies_2022 <- sum(vornamen_2022$Anzahl, na.rm = TRUE)
     total_babies_2023 <- sum(vornamen_2023$Anzahl, na.rm = TRUE)
 
-    if (total_babies_2022 > total_babies_2023) {
-      result <- "2022 had the bigger baby-boom."
-    } else if (total_babies_2023 > total_babies_2022) {
-      result <- "2023 had the bigger baby-boom."
-    } else {
-      result <- "Both years had the same number of babies born."
-    }
-
-    print(result)
     print(paste("Total babies in 2022:", total_babies_2022))
     print(paste("Total babies in 2023:", total_babies_2023))
     ```
@@ -221,20 +211,72 @@ determining the research question yourself.
 a)  Go to <https://github.com/owid/owid-datasets/tree/master/datasets>
     and choose a dataset that interests you. You can have a look at
     <https://ourworldindata.org/> to gather some inspiration.
+
 b)  Download the dataset and track it in git.
+
 c)  Put the name / title of the dataset and a link to it below.
 
--   Dataset Name: ...
--   Link: <https://github.com/owid/owid-datasets/>...
+-   Dataset Name: Prevalence of undernourishment - World Bank (2017) &
+    UN SOFI (2018)
+-   Link:
+    [https://github.com/owid/owid-datasets/tree/master/datasets/Prevalence%20of%20undernourishment%20-%20World%20Bank%20(2017)%20%26%20UN%20SOFI%20(2018)](https://github.com/owid/owid-datasets/tree/master/datasets/Prevalence%20of%20undernourishment%20-%20World%20Bank%20(2017)%20%26%20UN%20SOFI%20(2018)){.uri}
 
 d)  Come up with a (research) question you want to answer with the data
     and briefly explain why you believe this is an interesting question
     within one sentence. It should be a question that can be answered
     with the dataset and using R.
+
+Question: How has the prevalence of undernourishment changed globally
+from 1991 to 2015, and are there any significant trends or patterns
+observable over this period?
+
+Explanation: Understanding the global trend in undernourishment over
+time is crucial for evaluating the effectiveness of international
+efforts to combat hunger and for identifying regions that may require
+more attention.
+
 e)  Use R to answer your chosen question.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+data <- read.csv("data/Prevalence_of_undernourishment-World_Bank(2017)&UN_SOFI(2018).csv")
+
+colnames(data) <- c("Entity", "Year", "Undernourishment")
+
+global_trend <- data %>%
+  group_by(Year) %>%
+  summarize(Global_Undernourishment = mean(Undernourishment, na.rm = TRUE))
+
+print(global_trend)
+
+
+
+
+
+```
+
+The trend indicates a general decrease in undernourishment over the
+years, which is a positive development. The following assignment f) will
+clearly illustrate this result.
+
 f)  Create a meaningful plot / figure with the dataset. Make sure to
     provide a figure caption (via the chunk options / Rmarkdown) and
     correctly label the figure.
+
+```{r}
+ggplot(global_trend, aes(x = Year, y = Global_Undernourishment)) +
+  geom_line(color = "blue") +
+  geom_point(color = "red") +
+  labs(title = "Global Trend in Prevalence of Undernourishment (1991-2015)",
+       x = "Year",
+       y = "Prevalence of Undernourishment (%)") +
+  theme_minimal()
+
+ggsave("global_undernourishment_trend.png")
+
+```
 
 ## Final Note
 
